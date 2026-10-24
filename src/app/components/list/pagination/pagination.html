@@ -1,0 +1,27 @@
+<nav class="flex flex-col items-center justify-between gap-3 sm:flex-row" aria-label="Pagination">
+  <p class="text-sm text-muted" aria-live="polite">
+    Page <span class="font-semibold text-ink">{{ currentPage() }}</span> of
+    <span class="font-semibold text-ink">{{ totalPages() || 1 }}</span>
+    · {{ count() }} {{ count() === 1 ? 'result' : 'results' }}
+  </p>
+  <div class="flex gap-2">
+    <button
+      type="button"
+      class="btn"
+      [disabled]="previousPage() === null || busy()"
+      (click)="go(previousPage())"
+    >
+      <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+      Previous
+    </button>
+    <button
+      type="button"
+      class="btn"
+      [disabled]="nextPage() === null || busy()"
+      (click)="go(nextPage())"
+    >
+      Next
+      <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+    </button>
+  </div>
+</nav>

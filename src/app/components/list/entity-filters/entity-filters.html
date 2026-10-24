@@ -1,0 +1,75 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="rounded-card border border-line bg-space-800 p-4"
+  role="search"
+  aria-label="Filter results"
+  novalidate
+>
+  <div class="grid gap-4 sm:grid-cols-[10rem_1fr_auto] sm:items-start">
+    <div>
+      <label for="filter-id" class="mb-1 block text-sm font-medium text-muted">ID</label>
+      <input
+        id="filter-id"
+        class="field"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="e.g. 1"
+        formControlName="id"
+        [attr.aria-invalid]="idInvalid()"
+        [attr.aria-describedby]="idInvalid() ? 'filter-id-error' : null"
+      />
+      @if (idInvalid()) {
+        <p id="filter-id-error" class="mt-1 text-sm text-danger-300">
+          Enter a positive whole number.
+        </p>
+      }
+    </div>
+
+    <div>
+      <label for="filter-name" class="mb-1 block text-sm font-medium text-muted">
+        {{ nameLabel() }}
+      </label>
+      <input
+        id="filter-name"
+        class="field"
+        type="search"
+        autocomplete="off"
+        placeholder="Contains…"
+        formControlName="name"
+        [attr.aria-invalid]="nameInvalid()"
+        [attr.aria-describedby]="nameInvalid() ? 'filter-name-error' : null"
+      />
+      @if (nameInvalid()) {
+        <p id="filter-name-error" class="mt-1 text-sm text-danger-300">
+          Use at most {{ nameMaxLength }} characters.
+        </p>
+      }
+    </div>
+
+    <div class="flex gap-2 sm:pt-6">
+      <button type="submit" class="btn btn-primary">
+        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+        Search
+      </button>
+      <button type="button" class="btn" (click)="reset()">Clear</button>
+    </div>
+  </div>
+
+  @if (hasApplied()) {
+    <p class="mt-4 flex flex-wrap items-center gap-2 text-sm text-muted">
+      <span>Applied filters:</span>
+      @if (appliedId(); as id) {
+        <span class="rounded-full border border-gold-500/50 bg-space-900 px-3 py-1 text-gold-300">
+          ID: {{ id }}
+        </span>
+      }
+      @if (appliedName(); as name) {
+        <span class="rounded-full border border-gold-500/50 bg-space-900 px-3 py-1 text-gold-300">
+          {{ nameLabel() }}: {{ name }}
+        </span>
+      }
+    </p>
+  }
+</form>

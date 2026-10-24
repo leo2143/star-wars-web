@@ -1,0 +1,14 @@
+# Render Blueprint: Star Wars frontend as a static site (no Node.js at runtime).
+# The backend API URL is compiled into the bundle: edit src/environments/environment.ts
+# (apiBaseUrl) before deploying. Do not put secrets here or in the environment files.
+services:
+  - type: web
+    runtime: static
+    name: star-wars-web
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist/star-wars-web/browser
+    routes:
+      # SPA fallback so deep links (/people?page=2) survive a reload.
+      - type: rewrite
+        source: /*
+        destination: /index.html

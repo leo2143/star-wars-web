@@ -1,0 +1,67 @@
+<div class="mx-auto flex max-w-5xl flex-col gap-6" [attr.aria-busy]="loading()">
+  @if (!notFound()) {
+    <a
+      [routerLink]="listPath()"
+      [queryParams]="backQueryParams()"
+      class="inline-flex min-h-11 w-fit items-center gap-2 text-sm text-muted hover:text-gold-300"
+    >
+      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+      Back to {{ listLabel() }}
+    </a>
+  }
+
+  <header class="flex flex-col gap-1">
+    <p class="text-sm font-semibold tracking-widest text-gold-500 uppercase">{{ entityLabel() }}</p>
+    <h1
+      #heading
+      tabindex="-1"
+      class="font-display text-3xl font-bold tracking-wide text-gold-400 outline-offset-4"
+    >
+      {{ headingText() }}
+    </h1>
+    @if (subtitle() && state().status === 'success') {
+      <p class="text-muted">{{ subtitle() }}</p>
+    }
+  </header>
+
+  @switch (state().status) {
+    @case ('loading') {
+      <div role="status" aria-label="Loading details" class="flex flex-col gap-6">
+        <span class="sr-only">Loading details…</span>
+        <div class="flex flex-col gap-3" aria-hidden="true">
+          <div class="h-6 w-40 animate-pulse rounded-md bg-space-700"></div>
+          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            @for (n of [1, 2, 3, 4, 5, 6]; track n) {
+              <div class="h-16 animate-pulse rounded-card bg-space-800"></div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+    @case ('success') {
+      <div class="flex flex-col gap-8">
+        <ng-content />
+      </div>
+    }
+    @default {
+      @if (notFound()) {
+        <div
+          class="rounded-card border border-dashed border-line bg-space-800 px-6 py-12 text-center"
+          role="status"
+        >
+          <i class="fa-solid fa-satellite-dish mb-4 text-3xl text-gold-400" aria-hidden="true"></i>
+          <p class="mx-auto max-w-md text-muted">
+            We could not find a {{ entityLabel() }} with that ID. It may not exist or the link may
+            be wrong.
+          </p>
+          <a [routerLink]="listPath()" [queryParams]="backQueryParams()" class="btn mt-6">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            Back to {{ listLabel() }}
+          </a>
+        </div>
+      } @else {
+        <app-list-state mode="error" [error]="failure()" (retry)="retry.emit()" />
+      }
+    }
+  }
+</div>

@@ -1,0 +1,114 @@
+<main class="flex min-h-screen items-center justify-center px-4 py-10">
+  <div class="w-full max-w-md">
+    <div class="mb-8 text-center">
+      <p class="font-display text-3xl font-bold tracking-[0.25em] text-gold-400 uppercase">
+        Star Wars
+      </p>
+      <p class="mt-1 text-muted">Galactic database</p>
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="submit()"
+      class="rounded-card border border-line bg-space-800 p-6 shadow-glow sm:p-8"
+      novalidate
+    >
+      <h1 class="font-display text-xl font-semibold">Create account</h1>
+      <p class="mt-1 mb-6 text-sm text-muted">Register to access the archive.</p>
+
+      @if (errorMessage(); as message) {
+        <p
+          role="alert"
+          class="mb-4 rounded-lg border border-danger-300/40 bg-danger-900 px-4 py-3 text-sm text-danger-300"
+        >
+          {{ message }}
+        </p>
+      }
+
+      <div class="mb-4">
+        <label for="username" class="mb-1 block text-sm font-medium text-muted">Username</label>
+        <input
+          id="username"
+          class="field"
+          type="text"
+          formControlName="username"
+          autocomplete="username"
+          autocapitalize="none"
+          spellcheck="false"
+          [attr.aria-invalid]="message('username') !== null"
+          [attr.aria-describedby]="message('username') ? 'username-error' : 'username-hint'"
+          (input)="edited('username')"
+        />
+        @if (message('username'); as error) {
+          <p id="username-error" class="mt-1 text-sm text-danger-300">{{ error }}</p>
+        } @else {
+          <p id="username-hint" class="mt-1 text-sm text-muted">
+            3 to 50 letters, numbers, dots, underscores or hyphens.
+          </p>
+        }
+      </div>
+
+      <div class="mb-6">
+        <label for="password" class="mb-1 block text-sm font-medium text-muted">Password</label>
+        <div class="relative">
+          <input
+            id="password"
+            class="field pr-12"
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="password"
+            autocomplete="new-password"
+            [attr.aria-invalid]="message('password') !== null"
+            [attr.aria-describedby]="message('password') ? 'password-error' : 'password-hint'"
+            (input)="edited('password')"
+          />
+          <button
+            type="button"
+            class="absolute top-0 right-0 flex size-11 items-center justify-center rounded-lg text-muted hover:text-gold-300"
+            aria-controls="password"
+            [attr.aria-pressed]="showPassword()"
+            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'"
+            (click)="togglePassword()"
+          >
+            <i
+              class="fa-solid"
+              [class.fa-eye]="!showPassword()"
+              [class.fa-eye-slash]="showPassword()"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+        @if (message('password'); as error) {
+          <p id="password-error" class="mt-1 text-sm text-danger-300">{{ error }}</p>
+        } @else {
+          <p id="password-hint" class="mt-1 text-sm text-muted">
+            15 to 64 characters, different from the username.
+          </p>
+        }
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary w-full"
+        [disabled]="submitting()"
+        [attr.aria-busy]="submitting()"
+      >
+        @if (submitting()) {
+          <span
+            class="size-4 animate-spin rounded-full border-2 border-space-950 border-t-transparent"
+            aria-hidden="true"
+          ></span>
+          Creating account…
+        } @else {
+          Create account
+        }
+      </button>
+
+      <p class="mt-6 text-center text-sm text-muted">
+        Already have an account?
+        <a routerLink="/login" class="rounded-sm text-gold-300 underline-offset-4 hover:underline"
+          >Sign in</a
+        >
+      </p>
+    </form>
+  </div>
+</main>

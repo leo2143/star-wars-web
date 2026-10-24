@@ -1,0 +1,13 @@
+<section aria-labelledby="attributes-heading" class="flex flex-col gap-3">
+  <h2 id="attributes-heading" class="font-display text-xl font-semibold">{{ heading() }}</h2>
+  <dl
+    class="grid gap-px overflow-hidden rounded-card border border-line bg-line sm:grid-cols-2 lg:grid-cols-3"
+  >
+    @for (attribute of attributes(); track attribute.label) {
+      <div class="bg-space-800 px-4 py-3">
+        <dt class="text-sm text-muted">{{ attribute.label }}</dt>
+        <dd class="mt-0.5 font-semibold break-words">{{ attribute.value }}</dd>
+      </div>
+    }
+  </dl>
+</section>

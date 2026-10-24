@@ -1,0 +1,31 @@
+<app-detail-page
+  entityLabel="film"
+  listPath="/films"
+  listLabel="films"
+  [state]="detail.state()"
+  [title]="film()?.title ?? ''"
+  [subtitle]="subtitle()"
+  [backQueryParams]="detail.backQueryParams()"
+  (retry)="detail.retry()"
+>
+  @if (film()) {
+    <section aria-labelledby="film-crawl" class="flex flex-col gap-3">
+      <h2 id="film-crawl" class="font-display text-xl font-semibold">Opening crawl</h2>
+      <div class="rounded-card border border-line bg-space-900 px-6 py-8 shadow-glow sm:px-12">
+        @if (crawl(); as text) {
+          <p
+            class="mx-auto max-w-prose font-display text-lg leading-loose tracking-wide whitespace-pre-line text-gold-300"
+          >
+            {{ text }}
+          </p>
+        } @else {
+          <p class="text-center text-muted">No opening crawl recorded.</p>
+        }
+      </div>
+    </section>
+    <app-attribute-grid [attributes]="attributes()" />
+    <app-related-list heading="Characters" [items]="characters()" />
+    <app-related-list heading="Starships" [items]="starships()" />
+    <app-related-list heading="Vehicles" [items]="vehicles()" />
+  }
+</app-detail-page>

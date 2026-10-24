@@ -1,0 +1,52 @@
+@switch (mode()) {
+  @case ('loading') {
+    <div
+      class="rounded-card border border-line bg-space-800 p-4"
+      role="status"
+      aria-live="polite"
+      aria-label="Loading results"
+    >
+      <span class="sr-only">Loading results…</span>
+      <div class="space-y-3" aria-hidden="true">
+        @for (row of rows; track row) {
+          <div class="h-10 animate-pulse rounded-md bg-space-700"></div>
+        }
+      </div>
+    </div>
+  }
+  @case ('empty') {
+    <div
+      class="rounded-card border border-dashed border-line bg-space-800 px-6 py-12 text-center"
+      role="status"
+    >
+      <i class="fa-solid fa-satellite-dish mb-4 text-3xl text-gold-400" aria-hidden="true"></i>
+      <h2 class="font-display text-lg font-semibold">{{ emptyTitle() }}</h2>
+      <p class="mx-auto mt-2 max-w-md text-muted">{{ emptyText() }}</p>
+      @if (emptyReason() === 'no-matches') {
+        <button type="button" class="btn mt-6" (click)="clearFilters.emit()">Clear filters</button>
+      }
+    </div>
+  }
+  @case ('error') {
+    <div
+      class="rounded-card border border-danger-300/40 bg-danger-900 px-6 py-10 text-center"
+      role="alert"
+    >
+      <i
+        class="fa-solid fa-triangle-exclamation mb-4 text-3xl text-danger-300"
+        aria-hidden="true"
+      ></i>
+      <h2 class="font-display text-lg font-semibold">{{ errorTitle() }}</h2>
+      <p class="mx-auto mt-2 max-w-md text-danger-300">{{ error()?.message }}</p>
+      @if (error()?.retryAfterSeconds; as seconds) {
+        <p class="mt-1 text-sm text-muted">Suggested wait: {{ seconds }} seconds.</p>
+      }
+      @if (canRetry()) {
+        <button type="button" class="btn mt-6" (click)="retry.emit()">
+          <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+          Try again
+        </button>
+      }
+    </div>
+  }
+}

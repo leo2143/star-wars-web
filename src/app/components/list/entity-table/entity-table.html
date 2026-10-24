@@ -1,0 +1,119 @@
+<div class="transition-opacity" [class.opacity-50]="busy()" [attr.aria-busy]="busy()">
+  <!-- Wide screens -->
+  <div class="hidden overflow-hidden rounded-card border border-line bg-space-800 md:block">
+    <table class="w-full border-collapse text-left">
+      <caption class="sr-only">
+        {{
+          caption()
+        }}
+      </caption>
+      <thead class="bg-space-700 text-sm text-muted">
+        <tr>
+          @for (column of columns(); track column.key) {
+            <th scope="col" class="px-4 py-3 font-semibold" [attr.aria-sort]="ariaSort(column)">
+              @if (column.sortKey; as sortKey) {
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-2 rounded-sm font-semibold hover:text-gold-300"
+                  (click)="toggleSort(sortKey)"
+                >
+                  {{ column.header }}
+                  <i class="fa-solid" [class]="sortIcon(column)" aria-hidden="true"></i>
+                </button>
+              } @else {
+                {{ column.header }}
+              }
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows(); track row['id']) {
+          <tr class="border-t border-line align-top hover:bg-space-700/60">
+            @for (column of columns(); track column.key; let first = $first) {
+              @if (first) {
+                <th scope="row" class="px-4 py-3 font-semibold text-gold-300">
+                  @if (linkBase(); as base) {
+                    <a
+                      [routerLink]="[base, row['id']]"
+                      [queryParams]="linkQueryParams()"
+                      class="rounded-sm underline-offset-4 hover:underline"
+                      >{{ row[column.key] }}</a
+                    >
+                  } @else {
+                    {{ row[column.key] }}
+                  }
+                  @if (detailOf(row); as detail) {
+                    <details class="mt-1 font-normal text-ink">
+                      <summary class="cursor-pointer text-sm text-muted">
+                        {{ detailLabel() }}
+                      </summary>
+                      <p class="mt-2 max-w-prose text-sm leading-relaxed whitespace-pre-line">
+                        {{ detail }}
+                      </p>
+                    </details>
+                  }
+                </th>
+              } @else {
+                <td class="px-4 py-3">{{ row[column.key] }}</td>
+              }
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Narrow screens -->
+  @if (sortOptions().length > 0) {
+    <div class="mb-3 md:hidden">
+      <label for="sort-by" class="mb-1 block text-sm font-medium text-muted">Sort by</label>
+      <select id="sort-by" class="field" (change)="chooseSort($event)">
+        <option value="" [selected]="!sort()">Default order</option>
+        @for (option of sortOptions(); track option.value) {
+          <option [value]="option.value" [selected]="option.value === sort()">
+            {{ option.label }}
+          </option>
+        }
+      </select>
+    </div>
+  }
+  <ul class="space-y-3 md:hidden" [attr.aria-label]="caption()">
+    @for (row of rows(); track row['id']) {
+      <li class="rounded-card border border-line bg-space-800 p-4">
+        @for (column of columns(); track column.key; let first = $first) {
+          @if (first) {
+            <h2 class="font-display text-lg font-semibold text-gold-300">
+              @if (linkBase(); as base) {
+                <a
+                  [routerLink]="[base, row['id']]"
+                  [queryParams]="linkQueryParams()"
+                  class="rounded-sm underline-offset-4 hover:underline"
+                  >{{ row[column.key] }}</a
+                >
+              } @else {
+                {{ row[column.key] }}
+              }
+            </h2>
+          }
+        }
+        <dl class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          @for (column of columns(); track column.key; let first = $first) {
+            @if (!first) {
+              <div>
+                <dt class="text-muted">{{ column.header }}</dt>
+                <dd class="break-words">{{ row[column.key] }}</dd>
+              </div>
+            }
+          }
+        </dl>
+        @if (detailOf(row); as detail) {
+          <details class="mt-3">
+            <summary class="cursor-pointer text-sm text-muted">{{ detailLabel() }}</summary>
+            <p class="mt-2 text-sm leading-relaxed whitespace-pre-line">{{ detail }}</p>
+          </details>
+        }
+      </li>
+    }
+  </ul>
+</div>

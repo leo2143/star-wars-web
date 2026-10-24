@@ -1,0 +1,15 @@
+<app-detail-page
+  entityLabel="starship"
+  listPath="/starships"
+  listLabel="starships"
+  [state]="detail.state()"
+  [title]="starship()?.name ?? ''"
+  [subtitle]="subtitle()"
+  [backQueryParams]="detail.backQueryParams()"
+  (retry)="detail.retry()"
+>
+  @if (starship()) {
+    <app-attribute-grid [attributes]="attributes()" />
+    <app-related-list heading="Films" [items]="films()" />
+  }
+</app-detail-page>

@@ -1,0 +1,58 @@
+<div class="mx-auto flex max-w-6xl flex-col gap-6">
+  <app-page-header
+    [title]="title()"
+    [description]="description()"
+    [count]="page()?.count ?? null"
+  />
+
+  <app-entity-filters
+    [nameLabel]="nameLabel()"
+    [appliedId]="query().id"
+    [appliedName]="query().name"
+    (search)="search($event)"
+    (clear)="clear()"
+  />
+
+  <section [attr.aria-label]="title() + ' results'" class="flex flex-col gap-4">
+    @if (error(); as error) {
+      <app-list-state mode="error" [error]="error" (retry)="retry()" />
+    } @else {
+      @if (page(); as current) {
+        @if (current.results.length === 0) {
+          <app-list-state
+            mode="empty"
+            [emptyReason]="emptyReason()"
+            [entityLabel]="entityLabel()"
+            (clearFilters)="clear()"
+          />
+        } @else {
+          <app-entity-table
+            [rows]="current.results"
+            [columns]="columns()"
+            [caption]="title() + ' list'"
+            [detailKey]="detailKey()"
+            [detailLabel]="detailLabel()"
+            [linkBase]="detailPath()"
+            [linkQueryParams]="linkQueryParams()"
+            [sort]="query().sort"
+            [busy]="busy()"
+            (sortChange)="sortBy($event)"
+          />
+        }
+        @if (current.count > 0) {
+          <app-pagination
+            [currentPage]="current.currentPage"
+            [totalPages]="current.totalPages"
+            [count]="current.count"
+            [nextPage]="current.nextPage"
+            [previousPage]="current.previousPage"
+            [busy]="busy()"
+            (pageChange)="goToPage($event)"
+          />
+        }
+      } @else {
+        <app-list-state mode="loading" />
+      }
+    }
+  </section>
+</div>

@@ -1,0 +1,52 @@
+<aside
+  id="app-sidebar"
+  class="fixed inset-y-0 left-0 z-40 flex w-72 flex-col overflow-y-auto border-r border-line bg-space-900 shadow-glow transition-transform duration-200 lg:translate-x-0"
+  [class]="open() ? '' : '-translate-x-full max-lg:invisible'"
+  aria-label="Main sidebar"
+>
+  <div class="px-6 pt-6 pb-4">
+    <p class="font-display text-xl font-bold tracking-[0.2em] text-gold-400 uppercase">Star Wars</p>
+    <p class="text-sm text-muted">Galactic database</p>
+  </div>
+
+  <nav class="flex-1 px-3 py-2" aria-label="Main navigation">
+    <ul class="space-y-1">
+      @for (item of items; track item.path) {
+        <li>
+          <a
+            #firstLink
+            [routerLink]="item.path"
+            routerLinkActive="bg-space-700 text-gold-300 shadow-[inset_4px_0_0_var(--color-gold-400)]"
+            ariaCurrentWhenActive="page"
+            class="flex items-center gap-3 rounded-lg px-3 py-3 hover:bg-space-800"
+          >
+            <i [class]="item.icon + ' w-6 text-center text-lg'" aria-hidden="true"></i>
+            <span class="flex flex-col">
+              <span class="font-semibold">{{ item.label }}</span>
+              <span class="text-xs text-muted">{{ item.description }}</span>
+            </span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+
+  <div class="border-t border-line p-4">
+    <div class="mb-3 flex items-center gap-3">
+      <span
+        class="flex size-10 items-center justify-center rounded-full bg-gold-400 font-bold text-space-950"
+        aria-hidden="true"
+      >
+        {{ initial(auth.username()) }}
+      </span>
+      <div class="min-w-0">
+        <p class="text-xs text-muted">Signed in as</p>
+        <p class="truncate font-semibold" data-testid="session-user">{{ auth.username() }}</p>
+      </div>
+    </div>
+    <button type="button" class="btn w-full" (click)="auth.logout()">
+      <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+      Sign out
+    </button>
+  </div>
+</aside>

@@ -1,0 +1,39 @@
+<a
+  href="#main-content"
+  class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-gold-400 focus:px-4 focus:py-2 focus:text-space-950"
+>
+  Skip to content
+</a>
+
+<header
+  class="sticky top-0 z-30 flex items-center gap-3 border-b border-line bg-space-900/95 px-4 py-3 backdrop-blur lg:hidden"
+>
+  <button
+    #menuButton
+    type="button"
+    class="btn size-11 p-0!"
+    aria-controls="app-sidebar"
+    [attr.aria-expanded]="menuOpen()"
+    aria-label="Open navigation menu"
+    (click)="openMenu()"
+  >
+    <i class="fa-solid fa-bars" aria-hidden="true"></i>
+  </button>
+  <span class="font-display font-bold tracking-[0.2em] text-gold-400 uppercase">Star Wars</span>
+</header>
+
+@if (menuOpen()) {
+  <button
+    type="button"
+    class="fixed inset-0 z-30 bg-space-950/70 lg:hidden"
+    aria-label="Close navigation menu"
+    tabindex="-1"
+    (click)="closeMenu(true)"
+  ></button>
+}
+
+<app-sidebar [open]="menuOpen()" />
+
+<main id="main-content" tabindex="-1" class="px-4 py-6 sm:px-8 lg:ml-72 lg:py-10">
+  <router-outlet />
+</main>

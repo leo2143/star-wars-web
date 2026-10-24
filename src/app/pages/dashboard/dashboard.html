@@ -1,0 +1,36 @@
+<div class="mx-auto flex max-w-6xl flex-col gap-8">
+  <header>
+    <h1 class="font-display text-3xl font-bold tracking-wide text-gold-400">Mission control</h1>
+    <p class="mt-1 max-w-2xl text-muted">
+      @if (username(); as name) {
+        Welcome, {{ name }}.
+      }
+      Pick a category to start exploring the galaxy.
+    </p>
+  </header>
+
+  <ul class="grid gap-4 sm:grid-cols-2">
+    @for (item of items; track item.path) {
+      <li>
+        <a
+          [routerLink]="item.path"
+          class="group flex h-full items-center gap-4 rounded-card border border-line bg-space-800 p-6 transition-colors hover:border-gold-500 hover:bg-space-700"
+        >
+          <span
+            class="flex size-14 shrink-0 items-center justify-center rounded-full border border-gold-500/40 bg-space-900 text-2xl text-gold-400"
+          >
+            <i [class]="item.icon" aria-hidden="true"></i>
+          </span>
+          <span class="flex flex-col">
+            <span class="font-display text-xl font-semibold">{{ item.label }}</span>
+            <span class="text-sm text-muted">{{ item.description }}</span>
+          </span>
+          <i
+            class="fa-solid fa-arrow-right ml-auto text-muted transition-transform group-hover:translate-x-1 group-hover:text-gold-400"
+            aria-hidden="true"
+          ></i>
+        </a>
+      </li>
+    }
+  </ul>
+</div>
